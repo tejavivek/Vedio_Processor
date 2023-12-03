@@ -1,5 +1,4 @@
 # video_upload/tasks.py
-
 from celery import shared_task
 from .models import Video, Subtitle
 import subprocess
@@ -7,25 +6,28 @@ from datetime import datetime, timedelta
 import os  # Add this import statement
 
 @shared_task
+def add(x,y):
+    c = x + y
+    return c
+
+
+
+@shared_task
 def process_video(video_id):
     # Fetch video by ID
+    print('---------------------videooooooooooooo------------------')
     video = Video.objects.get(id=video_id)
-
-    # Define the path for the ccextractor binary
-    ccextractor_path = "C:\Program Files (x86)\CCExtractor\"
-    # Replace with the actual path
-
+    ccextractor_path = "C:/Program Files (x86)/CCExtractor/"
+    subtitles_file_path = os.path.join(ccextractor_path, 'subtitles.srt')
+    print(subtitles_file_path, '------------subtitles_file_path------------------')
     # Run ccextractor to extract subtitles
-    command = f"{C:\Program Files (x86)\CCExtractor\"} {video.video_file.path} -o subtitles.srt"
+    command = f"{ccextractor_path}CCExtractor {video.video_file.path} -o {subtitles_file_path}"
     subprocess.run(command, shell=True)
-
     # Process the generated subtitles file and save to the database
-    with open('subtitles.srt', 'r') as file:
+    with open(subtitles_file_path, 'r') as file:
         subtitles = file.read().split('\n\n')
-
         for subtitle_block in subtitles:
             subtitle_lines = subtitle_block.strip().split('\n')
-
             # Extract timecodes and subtitle text
             try:
                 timecode_parts = subtitle_lines[1].split(' --> ')
@@ -45,4 +47,4 @@ def process_video(video_id):
             )
 
     # Clean up temporary files
-    os.remove('subtitles.srt')
+    os.remove(subtitles_file_path)
