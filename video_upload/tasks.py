@@ -4,6 +4,7 @@ from celery import shared_task
 from .models import Video, Subtitle
 import subprocess
 from datetime import datetime, timedelta
+import os  # Add this import statement
 
 @shared_task
 def process_video(video_id):
@@ -11,10 +12,11 @@ def process_video(video_id):
     video = Video.objects.get(id=video_id)
 
     # Define the path for the ccextractor binary
-    ccextractor_path = '/path/to/ccextractor'  # Replace with the actual path
+    ccextractor_path = "C:\Program Files (x86)\CCExtractor\"
+    # Replace with the actual path
 
     # Run ccextractor to extract subtitles
-    command = f"{ccextractor_path} {video.video_file.path} -o subtitles.srt"
+    command = f"{C:\Program Files (x86)\CCExtractor\"} {video.video_file.path} -o subtitles.srt"
     subprocess.run(command, shell=True)
 
     # Process the generated subtitles file and save to the database

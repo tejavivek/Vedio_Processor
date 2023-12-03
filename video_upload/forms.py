@@ -6,4 +6,4 @@ from .models import Video
 class VideoUploadForm(forms.ModelForm):
     class Meta:
         model = Video
-        fields = ['title', 'file']  # Add other fields as needed
+        fields = ['video_file']  # Add other fields as needed
